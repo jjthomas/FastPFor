@@ -41,10 +41,10 @@ static inline uint32_t bit_select(uint32_t word, uint32_t upper, uint32_t lower)
 }
 
 static inline cost_info compute_cost(uint8_t width, uint16_t bit_count[3]) {
-  uint8_t num_exceptions = BATCH_SIZE - bit_count[0];
-  uint8_t fixed_cost = LG_WORD_SIZE + num_exceptions * bit_count[1];
-  uint8_t varint_cost = bit_count[2]; // will be 0 if there are no exceptions
-  uint8_t common_exception_cost = (num_exceptions > 0 ? 1 : 0) + num_exceptions * MAX(LG_BATCH_SIZE, 1);
+  uint16_t num_exceptions = BATCH_SIZE - bit_count[0];
+  uint16_t fixed_cost = LG_WORD_SIZE + num_exceptions * bit_count[1];
+  uint16_t varint_cost = bit_count[2]; // will be 0 if there are no exceptions
+  uint16_t common_exception_cost = (num_exceptions > 0 ? 1 : 0) + num_exceptions * MAX(LG_BATCH_SIZE, 1);
   return (cost_info) {fixed_cost <= varint_cost, (uint16_t)(width * bit_count[0] +
     common_exception_cost + (fixed_cost <= varint_cost ? fixed_cost : varint_cost))};
 }
